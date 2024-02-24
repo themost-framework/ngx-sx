@@ -1,0 +1,28 @@
+{
+  "name": "@themost/sx",
+  "description": "Styled components anatomy for Angular",
+  "version": "1.1.1",
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json",
+    "publish": "ng-packagr -p ng-package.json && npm publish dist/sx"
+  },
+  "peerDependencies": {
+    "@angular/common": "^15 || ^16 || ^17",
+    "@angular/core": "^15 || ^16 || ^17"
+  },
+  "dependencies": {
+    "styled-system": "^5.1.5",
+    "system-classnames": "^1.1.0",
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^17.0.9",
+    "@angular/cli": "^17.0.9",
+    "@angular/compiler-cli": "^17.0.0",
+    "@types/styled-system": "^5.1.22",
+    "@types/styled-system__css": "^5.0.21",
+    "ng-packagr": "^17.0.0",
+    "typescript": "~5.2.2"
+  }
+}
