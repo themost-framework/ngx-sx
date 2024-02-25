@@ -1,8 +1,10 @@
 import { Component, Directive, ElementRef, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 import { BackgroundProps, ColorProps, SpaceProps, TextColorProps,
   TypographyProps, GridProps,
-  LayoutProps, BorderProps, FlexboxProps, DisplayProps, PositionProps, MinWidthProps, MinHeightProps } from 'styled-system';
+  LayoutProps, BorderProps, FlexboxProps, DisplayProps, PositionProps, MinWidthProps, MinHeightProps, MaxWidthProps, MaxHeightProps, TextStyleProps } from 'styled-system';
 import { ThemeProvider } from './theme-provider.service';
+import * as CSS from 'csstype';
+
 
 export declare interface StyledInputAnnotation {
   [key: string]: any;
@@ -24,15 +26,17 @@ export function StyledInput() {
     styledInputAnnotation.styledInput.push(propertyKey);
   };
 }
-
-@Directive({
-  selector: '[styled]'
+@Component({
+  selector: 'styled',
+  template: `<ng-content></ng-content>`,
 })
-export class StyledComponentDirective implements SpaceProps, ColorProps,
+export class StyledComponent implements SpaceProps, ColorProps,
 TypographyProps, FlexboxProps, GridProps,
 LayoutProps, BorderProps, PositionProps, MinWidthProps, MinHeightProps, OnInit, OnChanges {
   
-  @Input('styled') styled: any;
+  protected contentElement?: HTMLElement;
+
+  @Input('as') as: string = 'div';
 
   @StyledInput() @Input('m') m: SpaceProps['m'];
   @StyledInput() @Input('mt') mt: SpaceProps['mt'];
@@ -78,6 +82,7 @@ LayoutProps, BorderProps, PositionProps, MinWidthProps, MinHeightProps, OnInit, 
   @StyledInput() @Input('letterSpacing') letterSpacing: TypographyProps['letterSpacing'];
   @StyledInput() @Input('textAlign') textAlign: TypographyProps['textAlign'];
   @StyledInput() @Input('fontStyle') fontStyle: TypographyProps['fontStyle'];
+  @StyledInput() @Input('textTransform') textTransform: TextStyleProps['textStyle'];
 
   // FlexboxProps
   @StyledInput() @Input('alignContent') alignContent: FlexboxProps['alignContent'];
@@ -165,7 +170,13 @@ LayoutProps, BorderProps, PositionProps, MinWidthProps, MinHeightProps, OnInit, 
         });
         if (currentClassNames.className.length > 0) {
           const classNames = currentClassNames.className.split(' ');
-          this.element.nativeElement.classList.add(...classNames);
+          this.contentElement?.classList.add(...classNames);
+        }
+        const style: CSS.Properties = Object.keys(currentClassNames).filter((key) => key != 'className').reduce((acc, key) => {
+            return Object.assign(acc, { [key]: currentClassNames[key] });
+        }, {});
+        if (this.contentElement) {
+          Object.assign(this.contentElement.style, style);
         }
       }
     });
@@ -173,6 +184,13 @@ LayoutProps, BorderProps, PositionProps, MinWidthProps, MinHeightProps, OnInit, 
 
   ngOnInit(): void {
     const styled = this as unknown as StyledInputAnnotation;
+
+    this.contentElement = document.createElement(this.as);
+    const { nativeElement } = this.element;
+    const { parentElement } = nativeElement;
+
+    parentElement.appendChild(this.contentElement);
+
     if (styled.styledInput) {
       const styledProps = styled.styledInput.filter((property: string) => {
         return styled[property] != null;
@@ -185,9 +203,20 @@ LayoutProps, BorderProps, PositionProps, MinWidthProps, MinHeightProps, OnInit, 
       const classNames = this.themeProvider.classNames(styledProps);
       if (classNames.className.length > 0) {
         const classList = classNames.className.split(' ');
-        this.element.nativeElement.classList.add(...classList);
+        this.contentElement.classList.add(...classList);
       }
+      const style: CSS.Properties = Object.keys(classNames).filter((key) => key != 'className').reduce((acc, key) => {
+          return Object.assign(acc, { [key]: classNames[key] });
+      }, {});
+      Object.assign(this.contentElement.style, style);
+      while (nativeElement.firstChild) {
+        this.contentElement.appendChild(nativeElement.firstChild);
+      }
+      parentElement.removeChild(nativeElement);
     }
+
+
+
   }
 }
 

@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SxDirective } from './sx.directive';
 import { ThemeProvider } from './theme-provider.service';
-import { StyledComponentDirective } from './styled.component';
+import { BoxComponent } from './Box.component';
 
 @NgModule({
   declarations: [
     SxDirective,
-    StyledComponentDirective
+    BoxComponent
   ],
   imports: [
     CommonModule
@@ -17,7 +17,7 @@ import { StyledComponentDirective } from './styled.component';
   ],
   exports: [
     SxDirective,
-    StyledComponentDirective
+    BoxComponent
   ]
 })
 export class StyledComponentsModule { }
