@@ -32,7 +32,7 @@ export function StyledInput() {
 })
 export class StyledComponent implements SpaceProps, ColorProps,
 TypographyProps, FlexboxProps, GridProps,
-LayoutProps, BorderProps, PositionProps, MinWidthProps, MinHeightProps, OnInit, OnChanges {
+LayoutProps, BorderProps, PositionProps, MinWidthProps, MinHeightProps, GridProps, OnInit, OnChanges {
   
   protected contentElement?: HTMLElement;
 

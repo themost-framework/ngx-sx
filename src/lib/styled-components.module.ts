@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { SxDirective } from './sx.directive';
 import { ThemeProvider } from './theme-provider.service';
 import { BoxComponent } from './Box.component';
+import { GridComponent } from './Grid.component';
 
 @NgModule({
   declarations: [
     SxDirective,
-    BoxComponent
+    BoxComponent,
+    GridComponent
   ],
   imports: [
     CommonModule
@@ -17,7 +19,8 @@ import { BoxComponent } from './Box.component';
   ],
   exports: [
     SxDirective,
-    BoxComponent
+    BoxComponent,
+    GridComponent
   ]
 })
 export class StyledComponentsModule { }
